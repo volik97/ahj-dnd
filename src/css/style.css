@@ -1,0 +1,140 @@
+body {
+  font-family: "Advent Pro", sans-serif;
+  letter-spacing: 2px;
+}
+
+#container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.column-todo, .column-progress, .column-done {
+  display: block;
+  height: fit-content;
+  width: 300px;
+  margin: 40px;
+  background-color: #1fbec5;
+  border: 0.5px solid #cdd1d4;
+  border-radius: 8px;
+  box-shadow: 0px 0px 20px -2px rgba(47, 123, 182, 0.521);
+}
+
+.title {
+  margin: 10px;
+  font-size: 20px;
+}
+
+.btn-add-another-card{
+  font-family: "Advent Pro", sans-serif;
+  font-size: medium;
+  width: 280px;
+  margin: 10px;
+  background-color: rgba(22, 40, 61, 0.219);
+  border: 1px solid #077cd621;
+  border-radius: 8px;
+}
+
+button:hover {
+  box-shadow: 0px 0px 20px 0px rgba(23, 57, 82, 0.2);
+  transform: scale(1.01);
+}
+
+.items{
+  min-height: 40px;
+  background-color: #1d9da7;
+  border-radius: 8px;
+  margin: 0 10px;
+  border: 2px solid #1d9da7;
+}
+
+.item {
+  margin: 5px;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column-reverse;
+  word-wrap: break-word;
+  background-color: white;
+  border-radius: 8px;
+  width: 240px;
+  margin: 10px;
+  padding: 1px 6px;
+  height: fit-content;
+  min-height: 25px;
+  border: 1px solid #d3d7da;
+}
+
+.item:hover {
+  cursor: grab;
+  box-shadow: 0px 0px 20px 0px rgba(23, 57, 82, 0.2);
+  transform: scale(1.01);
+}
+.item.dragged{
+  display: flex;
+  flex-direction: column-reverse;
+  position: absolute;
+  z-index: 999;
+  pointer-events: none;
+  word-wrap: break-word;
+  background-color: white;
+  border-radius: 8px;
+  width: 266px;
+  margin: 10px;
+  padding: 1px 6px;
+  height: fit-content;
+  min-height: 25px;
+  border: 1px solid #d3d7da;
+}
+.item:hover .deleted-btn{
+  display: block;
+}
+
+.deleted-btn {
+  display: none;
+  position: absolute;
+  margin-left: 220px;
+  background-image: url("/src/img/remove.png");
+  background-repeat: no-repeat;
+  background-size: 22px;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+}
+
+.deleted-btn:hover{
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.btn-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.btn-textarea {
+  margin-right: 9px;
+  margin-bottom: 10px;
+  font-family: "Advent Pro", sans-serif;
+  font-size: medium;
+  background-color: rgba(22, 40, 61, 0.219);
+  border: 1px solid #077cd621;
+  border-radius: 8px;
+}
+
+textarea {
+  outline: none;
+  resize: vertical;
+  font-family: "Advent Pro", sans-serif;
+  font-size: large;
+  border-radius: 8px;
+  width: 274px;
+  border: 1px solid #d3d7da;
+  margin: 10px;
+}
+
+.opacity{
+  opacity: 0.3;
+}
+
+.hidden{display: none;}
