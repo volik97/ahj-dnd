@@ -1,6 +1,5 @@
 /* eslint-disable class-methods-use-this */
 // /* eslint-disable no-console */
-import DnD from './dnd'
 
 export default class Card {
   constructor () {
@@ -32,7 +31,6 @@ export default class Card {
     card.textContent = text
     card.setAttribute('id', id)
     card.classList.add('item')
-    // const cardText = document.createElement('p');
     const close = document.createElement('span')
 
     close.classList.add('deleted-btn')

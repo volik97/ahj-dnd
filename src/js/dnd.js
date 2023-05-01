@@ -1,84 +1,128 @@
-export default class DnD {
-  constructor() {
-    this.itemsContainer = document.querySelectorAll(".items");
-    this.draggedElement = null;
-    this.copyDraggedElement = null;
-    this.osX = null;
-    this.osY = null;
+class CardDnD {
+  #el
+  #styles
+
+  constructor (element) {
+    this.#el = element
+    this.#styles = window.getComputedStyle(element)
   }
-  onMouseLeave(e) {
-    if (!this.draggedElement) return;
-    if (e.currentTarget.contains(this.draggedElement)) {
-      e.currentTarget.removeChild(this.draggedElement);
-    } else {
-      return;
+
+  clear () {
+    this.#el.remove()
+  }
+
+  set styles (text) {
+    this.#el.style.cssText = text
+  }
+
+  get styles () {
+    return this.#styles
+  }
+
+  get avatar () {
+    return (() => {
+      const avatar = document.createElement('div')
+      avatar.classList.add('opacity')
+      const { width, height } = this.styles
+      avatar.style.cssText = `
+            width:${width};
+            height:${height};
+            margin: 10px 0;
+            `
+      return avatar
+    })()
+  }
+
+  get element () {
+    return this.#el
+  }
+}
+
+// eslint-disable-next-line no-unused-vars
+export default class ControllerDnD {
+  constructor (container) {
+    this.container = container
+    this.draggingElement = null
+    this.draggingAvatar = null
+  }
+
+  clear () {
+    this.draggingAvatar = null
+    this.draggingElement = null
+  }
+
+  setDraggingElement (node) {
+    this.draggingElement = new CardDnD(node)
+  }
+
+  replaceDragging () {
+    this.draggingAvatar.replaceWith(this.draggingElement.element)
+    this.draggingElement.element.style = this.draggingElement.styles
+  }
+
+  onMouseDown = (e) => {
+    if (e.button !== 0) return
+    const target = e.target
+    if (target.classList.contains('item')) {
+      this.shiftX = e.offsetX
+      this.shiftY = e.offsetY
+      this.setDraggingElement(target)
+      document.body.style.cursor = 'grabbing'
+      this.draggingElement.style = `
+        left: ${e.pageX - this.shiftX}px;
+        top: ${e.pageY - this.shiftY}px
+        `
+      this.avatarEvent(e)
     }
   }
 
-  onMouseUp(e) {
-    if (!this.draggedElement) return;
+  onMouseUp = (e) => {
+    e.preventDefault()
+    if (this.draggingElement) {
+      this.replaceDragging()
+      this.clear()
+    }
+  }
+
+  avatarEvent (e) {
+    const target = e.target
+    const element = this.draggingElement
+    const avatar = this.draggingAvatar
+    if (!target.children[0] && target.classList.contains('items')) {
+      target.appendChild(avatar)
+    }
     if (
-      e.target.classList.contains("items") ||
-      e.target.classList.contains("item")
+      target.classList.contains('item') &&
+      !target.classList.contains('opacity')
     ) {
-        document.body.style.cursor = '';
-      this.copyDraggedElement.remove();
-      this.draggedElement.classList.remove("opacity");
-      this.draggedElement = null;
-      this.copyDraggedElement = null;
+      const { y, height } = target.getBoundingClientRect()
+      const appendPosition =
+        y + height / 2 > e.clientY ? 'beforebegin' : 'afterend'
+
+      if (!avatar) {
+        this.draggingAvatar = element.avatar
+      } else {
+        avatar.remove()
+        target.insertAdjacentElement(appendPosition, avatar)
+      }
     }
   }
 
-  onMouseMove(e) {
-    e.preventDefault();
-    if (!this.draggedElement) return;
-    document.body.append(this.copyDraggedElement);
-    this.copyDraggedElement.style.left = `${
-        e.clientX - (this.grabX - this.osX)
-      }px`;
-      this.copyDraggedElement.style.top = `${
-        e.clientY - (this.grabY - this.osY)
-      }px`;
-    const closest = document.elementFromPoint(e.clientX, e.clientY);
-    if (closest.parentElement.classList.contains('items')) {
-        this.draggedElement.classList.add('opacity');
-        if ((e.clientY - (closest.offsetTop + (closest.offsetHeight / 2))) < 0) {
-          closest.parentElement.insertBefore(this.draggedElement, closest);
-        } else {
-          closest.parentElement.insertBefore(this.draggedElement, closest.nextSibling);
-        }
+  onMouseMove = (e) => {
+    e.preventDefault()
+    if (this.draggingElement) {
+      const { pageX, pageY } = e
+      const element = this.draggingElement
+      const { width, height } = this.draggingElement.styles
+      element.styles = `
+        position: absolute;
+         left: ${pageX - this.shiftX}px;
+         top: ${pageY - this.shiftY}px;
+         pointer-events: none;
+        width: ${width};
+        height: ${height};
+    `
+      this.avatarEvent(e)
     }
-    if (e.target.classList.contains("items")) {
-      e.target.append(this.draggedElement);
-    } 
-    
-  }
-  onMouseDown(e) {
-    console.log(document.elementFromPoint(e.clientX, e.clientY));
-    e.preventDefault();
-    if (e.button !== 0) return;
-    if (e.target.classList.contains("item")) {
-      this.draggedElement = e.target;
-      this.copyDraggedElement = e.target.cloneNode(true);
-      this.draggedElement.classList.add("opacity");
-      this.copyDraggedElement.classList.add("dragged");
-      document.body.style.cursor = 'grabbing';
-      this.osX = this.draggedElement.offsetLeft;
-      this.osY = this.draggedElement.offsetTop;
-      this.grabX = e.clientX;
-      this.grabY = e.clientY;
-    }
-  }
-  events() {
-    for (const i of this.itemsContainer) {
-      i.addEventListener("mousedown", (e) => this.onMouseDown(e));
-      i.addEventListener("mouseleave", (e) => this.onMouseLeave(e));
-    }
-    document.documentElement.addEventListener("mousemove", (e) =>
-      this.onMouseMove(e)
-    );
-    document.documentElement.addEventListener("mouseup", (e) =>
-      this.onMouseUp(e)
-    );
   }
 }

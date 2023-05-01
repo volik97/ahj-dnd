@@ -69,22 +69,7 @@ button:hover {
   box-shadow: 0px 0px 20px 0px rgba(23, 57, 82, 0.2);
   transform: scale(1.01);
 }
-.item.dragged{
-  display: flex;
-  flex-direction: column-reverse;
-  position: absolute;
-  z-index: 999;
-  pointer-events: none;
-  word-wrap: break-word;
-  background-color: white;
-  border-radius: 8px;
-  width: 266px;
-  margin: 10px;
-  padding: 1px 6px;
-  height: fit-content;
-  min-height: 25px;
-  border: 1px solid #d3d7da;
-}
+
 .item:hover .deleted-btn{
   display: block;
 }
