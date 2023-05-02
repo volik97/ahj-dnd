@@ -125,4 +125,10 @@ export default class ControllerDnD {
       this.avatarEvent(e)
     }
   }
+
+  events () {
+    document.addEventListener('mousedown', this.onMouseDown)
+    document.addEventListener('mouseup', this.onMouseUp)
+    document.addEventListener('mousemove', this.onMouseMove)
+  }
 }

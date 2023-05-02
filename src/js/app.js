@@ -1,9 +1,9 @@
 import Card from './card'
 import ControllerDnD from './dnd'
-
+import AppMemory from './memory'
 const card = new Card()
 card.events()
+const mem = new AppMemory()
+mem.events()
 const drag = new ControllerDnD(document.querySelector('.items'))
-document.addEventListener('mousedown', drag.onMouseDown)
-document.addEventListener('mouseup', drag.onMouseUp)
-document.addEventListener('mousemove', drag.onMouseMove)
+drag.events()

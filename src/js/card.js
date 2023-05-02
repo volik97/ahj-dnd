@@ -27,12 +27,9 @@ export default class Card {
 
   newCard (text) {
     const card = document.createElement('div')
-    const id = +new Date()
     card.textContent = text
-    card.setAttribute('id', id)
     card.classList.add('item')
     const close = document.createElement('span')
-
     close.classList.add('deleted-btn')
     card.appendChild(close)
     return card

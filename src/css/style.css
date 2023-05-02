@@ -9,7 +9,7 @@ body {
   justify-content: center;
 }
 
-.column-todo, .column-progress, .column-done {
+.todo, .progress, .done {
   display: block;
   height: fit-content;
   width: 300px;
