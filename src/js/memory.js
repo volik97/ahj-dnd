@@ -30,7 +30,6 @@ export default class AppMemory {
     const items = getInLS
     for (const name of this.columnsName) {
       for (const text of items[name]) {
-        console.log(text)
         document.querySelector(`.${name}`).children[1].appendChild(this.createCard(text))
       }
     }
